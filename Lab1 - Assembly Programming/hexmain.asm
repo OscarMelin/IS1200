@@ -4,7 +4,7 @@
 
 .text
 main:
-	li	$a0,10	# change this to test different values
+	li	$a0,17	# change this to test different values
 
 	jal	hexasc		# call hexasc
 	nop			# delay slot filler (just in case)	
@@ -21,8 +21,18 @@ stop:	j	stop		# stop after one run
   #
 
 hexasc:
-	addi	$s0,$a0, 0x30
-	move	$v0, $s0
+	andi	$t0, $a0, 0xf
+
+	slti	$t1,$a1,9      # checks if $t0 > 9
+	beq		$t1,$zero,low # if $t0 <= t0, goes to label3
+
+	slti	$t1,$a1,15      # checks if $t0 > 9
+	beq		$t1,$zero,high # if $t0 <= t0, goes to label3
+
+	low:
+		addi	$v0,$t0, 0x30
+	high:
+		addi	$v0,$t0, 0x37
 	
 	jr $ra
 	
