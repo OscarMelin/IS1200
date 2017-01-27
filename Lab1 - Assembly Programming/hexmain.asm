@@ -2,9 +2,9 @@
   # Written 2015-09-04 by F Lundevall
   # Copyright abandonded - this file is in the public domain.
 
-	.text
+.text
 main:
-	li	$a0,0		# change this to test different values
+	li	$a0,10	# change this to test different values
 
 	jal	hexasc		# call hexasc
 	nop			# delay slot filler (just in case)	
@@ -20,3 +20,9 @@ stop:	j	stop		# stop after one run
   # You can write your own code for hexasc here
   #
 
+hexasc:
+	addi	$s0,$a0, 0x30
+	move	$v0, $s0
+	
+	jr $ra
+	
