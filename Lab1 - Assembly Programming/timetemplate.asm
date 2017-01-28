@@ -93,3 +93,5 @@ hexasc:
 delay:
 	jr $ra
 	nop
+	
+time2string:
