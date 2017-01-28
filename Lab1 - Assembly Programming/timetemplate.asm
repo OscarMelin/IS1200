@@ -74,3 +74,18 @@ tiend:	sw	$t0,0($a0)	# save updated result
 
   # you can write your code for subroutine "hexasc" below this line
   #
+hexasc:
+	andi	$t0, $a0, 0xf
+
+	slti	$t1,$a0,10		# checks if $t0 < 9
+	bne		$t1,$zero,low	# if $t0 <= t0, goes to low
+	
+	slti	$t1,$a0,16		# checks if $t0 < 15
+	bne		$t1,$zero,high	# if $t0 <= t0, goes to high
+
+	low:
+		addi	$v0,$t0, 0x30
+		jr $ra
+	high:
+		addi	$v0,$t0, 0x37
+		jr $ra
