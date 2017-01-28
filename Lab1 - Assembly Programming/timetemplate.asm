@@ -89,3 +89,7 @@ hexasc:
 	high:
 		addi	$v0,$t0, 0x37
 		jr $ra
+		
+delay:
+	jr $ra
+	nop
