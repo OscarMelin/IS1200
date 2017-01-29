@@ -1,5 +1,5 @@
   # timetemplate.asm
-  # Written 2015 by F Lundevall
+  # Written 2016 by Oscar Melin
   # Copyright abandonded - this file is in the public domain.
 
 .macro	PUSH (%reg)
@@ -86,14 +86,16 @@ hexasc:
 	low:
 		addi	$v0,$t0, 0x30
 		jr $ra
+		nop
 	high:
 		addi	$v0,$t0, 0x37
 		jr $ra
+		nop
 		
 delay:
 
 	# constant
-	li $t1, 5
+	li $t1, 3
 	# ms
 	move $t2, $a0
 
@@ -111,11 +113,14 @@ delay:
 		
 			# i < $t1
 			bge $t0, $t1, while
+			nop
 			addi $t0, $t0, 1
 			
 			j for
+			nop
 						
 		j while
+		nop
 	
 	exit:
 
