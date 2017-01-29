@@ -91,7 +91,82 @@ hexasc:
 		jr $ra
 		
 delay:
+
+	# constant
+	li $t1, 5
+	# ms
+	move $t2, $a0
+
+	
+	while:
+	
+		# ms > 0;
+		ble $t2, 0, exit
+		# ms = ms - 1;
+		sub $t2, $t2, 1
+		# int i = 0;
+		li $t0, 0
+	
+		for:
+		
+			# i < $t1
+			bge $t0, $t1, while
+			addi $t0, $t0, 1
+			
+			j for
+						
+		j while
+	
+	exit:
+
+		jr $ra
+		nop
+
+time2string:
+	PUSH $ra
+	PUSH $s0
+	PUSH $s1
+
+	move $s0, $a0 # Address where well store printable time
+	move $s1, $a1 # Address of mytime
+		
+	#ADD CHECK FOR RESET?
+	
+	andi $t0, $s1, 0xf000 # Get first digit
+	srl $a0, $t0, 0x0c # Shift right by 12
+	jal hexasc
+	nop
+	move $t1, $v0
+	sb $t1, 0($s0)
+	
+	andi $t0, $s1, 0xf00 # Get second digit
+	srl $a0, $t0, 0x8 # Shift right by 8
+	jal hexasc
+	nop
+	move $t1, $v0
+	sb $t1, 1($s0)
+	
+	li $t1, 0x3a # Load :
+	sb $t1, 2($s0)
+	
+	andi $t0, $s1, 0xf0 # Get third digit
+	srl $a0, $t0, 0x4 # Shift right by 4
+	jal hexasc
+	nop
+	move $t1, $v0
+	sb $t1, 3($s0)
+	
+	andi $a0, $s1, 0xf # Get last digit, no shift needed
+	jal hexasc
+	nop
+	move $t1, $v0
+	sb $t1, 4($s0)
+	
+	li $t1, 0x0
+	sb $t1, 5($s0) # Store string terminator
+
+	POP $s1
+	POP $s0
+	POP $ra
 	jr $ra
 	nop
-	
-time2string:
