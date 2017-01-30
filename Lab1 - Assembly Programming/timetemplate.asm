@@ -166,9 +166,27 @@ time2string:
 	nop
 	move $t1, $v0
 	sb $t1, 4($s0)
+
+	# Surprise assignment
+	# Last digit stored in $a0 from previous
+	and $t2, $a0, 0x1
+	beq $t2, $zero, even
+	nop
+	
+	li $t1, 0x44
+	sb $t1, 5($s0) # Store string terminator
+	
+	j odd
+	nop
+	
+	even:
+		li $t1, 0x45
+		sb $t1, 5($s0) # Store string terminator
+	odd:
+	
 	
 	li $t1, 0x0
-	sb $t1, 5($s0) # Store string terminator
+	sb $t1, 6($s0) # Store string terminator
 
 	POP $s1
 	POP $s0
