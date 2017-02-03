@@ -8,3 +8,4 @@
 15  
 16	li	$t0,0x5d  
 17	bne	$s0,$t0,loop  
+
