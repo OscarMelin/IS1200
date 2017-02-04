@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 #define COLUMNS 6
@@ -19,14 +20,19 @@ void print_sieves(int n){
 
 	int i;
 	int j;
-	char numbers[n];
+	char *numbers;
+
+	if ((numbers = malloc(sizeof(char) * n)) == NULL) {
+		printf("Memory allocation failed");
+		exit(0);
+	}
 
 	for (i = 0; i < n; i++)
 		numbers[i] = 1;
 
 	for (i = 2; i <= (int) sqrt(n); i++) {
 		if (numbers[i]) {
-			for (j = i*i; j < n; j += i) 
+			for (j = i*i; j < n; j += i)
 				numbers[j] = 0;
 		}
 	}
@@ -37,6 +43,7 @@ void print_sieves(int n){
 	}
 
 	printf("\n");
+	free(numbers);
 }
 
 // 'argc' contains the number of program arguments, and
