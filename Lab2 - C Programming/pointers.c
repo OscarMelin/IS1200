@@ -3,16 +3,27 @@
 char* text1 = "This is a string.";
 char* text2 = "Yet another thing.";
 
-char* list1[80];
-char* list2[80];
-int* count = 0;
+int list1[20];
+int list2[20];
+int count = 0;
 
-void copycodes() {
+void copycodes(char* text, int* list, int* count) {
 
+	while(*text != 0) {
+		
+		*list = *text; //sw	$t0,0($a1)
+
+		text++; //addi	$a0,$a0,1
+		list++; //addi	$a1,$a1,4
+
+		(*count)++;
+	}
 }
 
-void work(char* text, char* list, int* count) {
-	printf("%p\n", text1);
+void work() {
+	
+	copycodes(text1, list1, &count);
+	copycodes(text2, list2, &count);
 }
 
 void printlist(const int* lst) {
