@@ -33,6 +33,10 @@ void labinit( void ) {
 	// Set last 8 bits to zero, i.e. sets them as output pins.
 	*E = *E &0xff00;
 
+	// Initialize port D, set bits 11-5 as inputs.
+	// !If wrong order, try 0x07f0.!
+	TRISD = TRISD & 0x0fe0;
+
 	return;
 }
 
