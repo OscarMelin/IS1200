@@ -31,7 +31,7 @@ void labinit( void ) {
 	volatile int *E = (volatile int *) 0xbf886100;
 	
 	// Set last 8 bits to zero, i.e. sets them as output pins.
-	*E = *E &0xff00;
+	*E = *E & 0xff00;
 
 	// Initialize port D, set bits 11-5 as inputs.
 	// !If wrong order, try 0x07f0.!
@@ -53,8 +53,6 @@ void labwork( void ) {
 	display_update();
 	tick( &mytime );
 	display_image(96, icon);
-
-	
 
 }
 
