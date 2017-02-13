@@ -61,10 +61,6 @@ void labinit( void ) {
 /* This function is called repetitively from the main program */
 void labwork( void ) {
 
-	volatile int *porte = (volatile int *) 0xbf886110;
-
-	(*porte) += 0x1;
-
 	int sw = getsw();
 	int btn = getbtns();
 	/* 
@@ -88,7 +84,7 @@ void labwork( void ) {
 	if (IFS(0) & 0x100) {
 
 		// Reset all event flags. (Not so elegant)
-		IFSCLR(0) = 0x0;		
+		IFS(0) = 0;		
 		timeoutcount++;
 
 		if (timeoutcount == 10) {
