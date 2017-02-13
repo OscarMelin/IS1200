@@ -29,7 +29,7 @@ char textstring[] = "text, more text, and even more text!";
 
 void user_isr (void) {
 
-	IFS(0);
+	IFS(0) = 0;
 	timeoutcount++;
 
 	if (timeoutcount == 10) {
@@ -62,19 +62,17 @@ void labinit( void ) {
 	in T2CON.
 	Heavily inspired byexercise 2, question 4.
 	*/	
-  PR2 = TMR2PERIOD;
-  T2CON = 0x0; // clearing the clock
-  T2CONSET = 0x70; // setting the prescale
-  TMR2 = 0; // reset timer to 0
-  T2CONSET = 0x8000; // turn timer on, set bit 15 to 1
+	T2CON = 0; //clear clock
+	T2CONSET = 0x70;
+	PR2 = TMR2PERIOD;
+	TMR2 = 0;
+	T2CONSET = 0x8000;
 
-  // enabling interupts from Timer 2
-  // IPC(2) = 7;
-  IPC(2) = IPC(2) | 0x10;
-  // set bit no 8 to enable interupt
-  IEC(0) = 0x100;
-  // calling interupt from labwork.S
-  enable_interrupt();
+	// Enable interrupts from TMR2
+	IPC(2) = 4;
+	// Enable interrupts globally
+	IEC(0) = 0x100;
+	enable_interrupt();
 	
 	return;
 }
