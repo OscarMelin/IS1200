@@ -45,15 +45,6 @@ void user_isr (void) {
 /* Lab-specific initialization goes here */
 void labinit( void ) {
 
-	// Set *E to address of TRISE.
-	volatile int *E = (volatile int *) 0xbf886100;
-	
-	// Set last 8 bits to zero, i.e. sets them as output pins.
-	*E = *E & 0xff00;
-
-	// Initialize port D, set bits 11-5 as inputs.
-	TRISD = TRISD & 0x0fe0;
-
 	/*
 	Set 0x70, 0111 000 for 1:256 prescaling.
 	Set timeperiod.
