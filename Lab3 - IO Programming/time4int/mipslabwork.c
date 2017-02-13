@@ -62,7 +62,7 @@ void labinit( void ) {
 	in T2CON.
 	Heavily inspired byexercise 2, question 4.
 	*/	
-	T2CON = 0; //clear clock
+
 	T2CONSET = 0x70;
 	PR2 = TMR2PERIOD;
 	TMR2 = 0;
