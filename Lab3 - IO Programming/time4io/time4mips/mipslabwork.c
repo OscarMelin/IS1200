@@ -14,7 +14,7 @@
 #include <pic32mx.h>	/* Declarations of system-specific addresses etc */
 #include "mipslab.h"	/* Declatations for these labs */
 
-int mytime = 0x5957;
+int mytime = 0x0000;
 
 char textstring[] = "text, more text, and even more text!";
 
@@ -46,6 +46,23 @@ void labwork( void ) {
 	volatile int *porte = (volatile int *) 0xbf886110;
 
 	(*porte) += 0x1;
+
+	int sw = getsw();
+	int btn = getbtns();
+	/* 
+	Checks if bit 1(001) is pressed and 2(010) and so on ..	
+	sw is a number 0-f, shift it into the right position and OR it with the correct zeroed byte of mytime.
+	*/	
+
+	if (btn & 1) {
+		mytime = (sw << 4) | (mytime & 0xff0f);
+	}
+	if (btn & 2) {
+		mytime = (sw << 8) | (mytime & 0xf0ff);
+	}
+	if (btn & 4) {
+		mytime = (sw << 12) | (mytime & 0x0fff);
+	}
 
 	delay( 1000 );
 	time2string( textstring, mytime );
