@@ -5,6 +5,7 @@
 
 .global delay  
 .global	time2string 
+.global enable_interrupt
 
 .macro	PUSH reg
 	addi	$sp,$sp,-4
@@ -138,5 +139,10 @@ time2string:
 	POP $s1
 	POP $s0
 	POP $ra
+	jr $ra
+	nop
+
+enable_interrupt:
+	ei
 	jr $ra
 	nop

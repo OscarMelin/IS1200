@@ -21,13 +21,25 @@
 
 int mytime = 0x0000;
 int timeoutcount = 0;
+int prime = 1234567;
 
 char textstring[] = "text, more text, and even more text!";
 
 /* Interrupt Service Routine */
-void user_isr( void )
-{
-	return;
+
+void user_isr (void) {
+
+	IFS(0);
+	timeoutcount++;
+
+	if (timeoutcount == 10) {
+
+		time2string(textstring, mytime);
+		display_string(3, textstring);
+		display_update();
+		tick( &mytime);
+		timeoutcount = 0;
+	}
 }
 
 /* Lab-specific initialization goes here */
@@ -50,54 +62,29 @@ void labinit( void ) {
 	in T2CON.
 	Heavily inspired byexercise 2, question 4.
 	*/	
-	T2CONSET = 0x70;
-	PR2 = TMR2PERIOD;
-	TMR2 = 0;
-	T2CONSET = 0x8000; 
+  PR2 = TMR2PERIOD;
+  T2CON = 0x0; // clearing the clock
+  T2CONSET = 0x70; // setting the prescale
+  TMR2 = 0; // reset timer to 0
+  T2CONSET = 0x8000; // turn timer on, set bit 15 to 1
 
+  // enabling interupts from Timer 2
+  // IPC(2) = 7;
+  IPC(2) = IPC(2) | 0x10;
+  // set bit no 8 to enable interupt
+  IEC(0) = 0x100;
+  // calling interupt from labwork.S
+  enable_interrupt();
+	
 	return;
 }
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
 
-	int sw = getsw();
-	int btn = getbtns();
-	/* 
-	Checks if bit 1(001) is pressed and 2(010) and so on ..	
-	sw is a number 0-f, shift it into the right position and OR it with the correct zeroed byte of mytime.
-	*/	
-
-	if (btn & 1) {
-		mytime = (sw << 4) | (mytime & 0xff0f);
-	}
-	if (btn & 2) {
-		mytime = (sw << 8) | (mytime & 0xf0ff);
-	}
-	if (btn & 4) {
-		mytime = (sw << 12) | (mytime & 0x0fff);
-	}
-
-	//delay( 1000 );
-	
-	// Check time-out event flag.
-	if (IFS(0) & 0x100) {
-
-		// Reset all event flags. (Not so elegant)
-		IFS(0) = 0;		
-		timeoutcount++;
-
-		if (timeoutcount == 10) {
-
-		time2string( textstring, mytime );
-		display_string( 3, textstring );
-		display_update();
-		tick( &mytime );
-		display_image(96, icon);
-				
-		timeoutcount = 0;		
-		}
-	}		
+	prime = nextprime(prime);
+	display_string(0, itoaconv(prime));
+	display_update();
 }
 
 
