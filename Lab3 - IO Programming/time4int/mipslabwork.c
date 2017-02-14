@@ -22,6 +22,7 @@
 int mytime = 0x0000;
 int timeoutcount = 0;
 int prime = 1234567;
+volatile int *porte = (volatile int *) 0xbf886110;
 
 char textstring[] = "text, more text, and even more text!";
 
@@ -29,22 +30,43 @@ char textstring[] = "text, more text, and even more text!";
 
 void user_isr (void) {
 
-	IFS(0) = 0;
-	timeoutcount++;
 
-	if (timeoutcount == 10) {
+	if (IFS(0) & 0x100) {
+
+		timeoutcount++;
+		IFS(0) = 0;
+	
+		if (timeoutcount == 10) {
 
 		time2string(textstring, mytime);
 		display_string(3, textstring);
 		display_update();
 		tick( &mytime);
 		timeoutcount = 0;
+		}
+
 	}
+	if (IFS(0) & (1 << 15)){
+
+		IFS(0) = 0;
+		(*porte)++;
+	}
+
 }
 
 /* Lab-specific initialization goes here */
 void labinit( void ) {
 
+
+	// Set *E to address of TRISE.
+	volatile int *E = (volatile int *) 0xbf886100;
+	
+	// Set last 8 bits to zero, i.e. sets them as output pins.
+	*E = *E & 0xff00;
+
+	// Initialize port D, set bits 11-5 as inputs.
+	TRISD = TRISD & 0x0fe0;
+	
 	/*
 	Set 0x70, 0111 000 for 1:256 prescaling.
 	Set timeperiod.
@@ -61,8 +83,14 @@ void labinit( void ) {
 
 	// Enable interrupts from TMR2
 	IPC(2) = 4;
-	// Enable interrupts globally
 	IEC(0) = 0x100;
+	// Enable interrupts for SW3
+	IPC(3) = 0x1c000000;
+	IEC(0) = IEC(0) | (1 << 15);	
+
+
+
+	// Enable interrupts globally
 	enable_interrupt();
 	
 	return;
