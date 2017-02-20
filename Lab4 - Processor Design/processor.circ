@@ -431,6 +431,7 @@ aa bbbbbbbb cc
     <wire from="(440,290)" to="(440,300)"/>
     <wire from="(110,440)" to="(160,440)"/>
     <wire from="(470,90)" to="(470,290)"/>
+    <wire from="(480,260)" to="(480,470)"/>
     <wire from="(280,160)" to="(390,160)"/>
     <wire from="(190,290)" to="(230,290)"/>
     <wire from="(190,570)" to="(230,570)"/>
@@ -463,15 +464,16 @@ aa bbbbbbbb cc
     <wire from="(220,310)" to="(220,380)"/>
     <wire from="(240,300)" to="(240,310)"/>
     <wire from="(240,580)" to="(240,590)"/>
-    <wire from="(490,470)" to="(490,480)"/>
     <wire from="(220,20)" to="(220,170)"/>
     <wire from="(190,220)" to="(230,220)"/>
     <wire from="(190,500)" to="(230,500)"/>
     <wire from="(380,170)" to="(420,170)"/>
     <wire from="(380,330)" to="(420,330)"/>
+    <wire from="(390,260)" to="(480,260)"/>
     <wire from="(200,280)" to="(230,280)"/>
     <wire from="(200,560)" to="(230,560)"/>
     <wire from="(330,210)" to="(330,630)"/>
+    <wire from="(390,160)" to="(390,260)"/>
     <wire from="(460,340)" to="(490,340)"/>
     <wire from="(460,180)" to="(490,180)"/>
     <wire from="(320,200)" to="(350,200)"/>
@@ -513,7 +515,6 @@ aa bbbbbbbb cc
     <wire from="(310,90)" to="(470,90)"/>
     <wire from="(350,200)" to="(350,360)"/>
     <wire from="(370,180)" to="(370,340)"/>
-    <wire from="(390,160)" to="(390,320)"/>
     <wire from="(410,140)" to="(410,300)"/>
     <wire from="(260,350)" to="(290,350)"/>
     <wire from="(390,160)" to="(420,160)"/>
@@ -524,10 +525,12 @@ aa bbbbbbbb cc
     <wire from="(220,240)" to="(240,240)"/>
     <wire from="(220,520)" to="(240,520)"/>
     <wire from="(80,650)" to="(160,650)"/>
+    <wire from="(480,470)" to="(490,470)"/>
     <wire from="(260,210)" to="(270,210)"/>
     <wire from="(150,420)" to="(160,420)"/>
     <wire from="(300,180)" to="(300,420)"/>
     <wire from="(150,140)" to="(160,140)"/>
+    <wire from="(390,260)" to="(390,320)"/>
     <wire from="(70,170)" to="(140,170)"/>
     <wire from="(140,170)" to="(140,230)"/>
     <comp lib="1" loc="(190,430)" name="AND Gate">
@@ -587,6 +590,7 @@ aa bbbbbbbb cc
     </comp>
     <comp lib="4" loc="(260,140)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="$0"/>
     </comp>
     <comp lib="4" loc="(260,280)" name="Register">
       <a name="width" val="32"/>
