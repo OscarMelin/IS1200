@@ -86,7 +86,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <circ-port height="8" pin="140,160" width="8" x="46" y="106"/>
       <circ-port height="8" pin="140,280" width="8" x="46" y="76"/>
       <circ-port height="10" pin="780,130" width="10" x="135" y="85"/>
-      <circ-port height="10" pin="850,220" width="10" x="135" y="95"/>
+      <circ-port height="10" pin="850,220" width="10" x="125" y="55"/>
       <circ-anchor facing="east" height="6" width="6" x="137" y="77"/>
     </appear>
     <wire from="(170,20)" to="(680,20)"/>
@@ -222,10 +222,12 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(90,140)" to="(90,300)"/>
+    <wire from="(650,120)" to="(650,240)"/>
     <wire from="(70,270)" to="(100,270)"/>
     <wire from="(170,290)" to="(180,290)"/>
     <wire from="(220,280)" to="(230,280)"/>
     <wire from="(780,360)" to="(810,360)"/>
+    <wire from="(520,120)" to="(650,120)"/>
     <wire from="(110,290)" to="(110,300)"/>
     <wire from="(130,270)" to="(180,270)"/>
     <wire from="(90,300)" to="(110,300)"/>
@@ -243,6 +245,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <comp lib="0" loc="(90,140)" name="Clock">
       <a name="facing" val="south"/>
     </comp>
+    <comp loc="(700,260)" name="ALU"/>
     <comp lib="0" loc="(170,290)" name="Constant">
       <a name="width" val="3"/>
       <a name="value" val="0x2"/>
