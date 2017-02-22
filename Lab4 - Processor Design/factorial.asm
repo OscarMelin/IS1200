@@ -1,10 +1,16 @@
 
 addi $v0, $0, 0		# Return register
-addi $a0, $0, 1		# n
+addi $a0, $0, 5		# n
 addi $a1, $0, 1		# i
 addi $v1, $0, 0		# return for multiply
 addi $a2, $v1, 1
 
+beq $a0, $0, basecase	# n == 0
+add  $0, $0, $0			# NOP
+
+addi $at, $0, 1		# n == 1
+beq $a0, $at, basecase
+add  $0, $0, $0			# NOP
 
 loop:
 	beq  $a1, $a0, end
@@ -29,6 +35,11 @@ loop:
 		
 		beq  $0, $0, loop
 		add  $0, $0, $0		# NOP
+
+basecase:
+	addi $v1, $0, 1
+	beq  $0, $0, end
+	add  $0, $0, $0			# NOP
 
 end:
 	add  $v0, $v0, $v1	# Increment global return
