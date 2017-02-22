@@ -1,6 +1,6 @@
 
 addi $v0, $0, 0		# Return register
-addi $a0, $0, 1		# n
+addi $a0, $0, 2		# n
 addi $a1, $0, 1		# i
 addi $v1, $0, 0		# return for multiply
 addi $a2, $v1, 1
@@ -38,7 +38,7 @@ loop:
 
 basecase:
 	addi $v1, $0, 1
-	beq  $0, $0, end
+	beq  $0, $0, stop
 	add  $0, $0, $0			# NOP
 
 stop:
@@ -46,4 +46,5 @@ stop:
 	beq  $0,$0, end
 
 end:
-	beq $0, $0, end		# NOP
+	add  $0, $0, $0			# NOP
+	#beq $0, $0, end		# NOP
