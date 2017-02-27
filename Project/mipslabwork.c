@@ -22,21 +22,40 @@
 int mytime = 0x0000;
 int timeoutcount = 0;
 int prime = 1234567;
+int game_started = 1; // Flag indicating if game is started. 
+int direction = 1; // Direction of blinking, 0 - Left, 1 - Right
 volatile int *porte = (volatile int *) 0xbf886110;
 
-char textstring[] = "text, more text, and even more text!";
+char textstring[] = "";
 
 /* Interrupt Service Routine */
+
+void blink(void) {
+
+	if (*porte == 1)
+		direction = 0;
+
+	if (*porte == 128)
+		direction = 1;
+
+	if (direction) {
+		*porte = *porte / 2;
+	} else {
+		*porte = *porte * 2;	
+	}
+}
 
 void user_isr (void) {
 
 
 	if (IFS(0) & 0x100) {
-
+		// Timer interrupt
 		timeoutcount++;
 		IFS(0) = 0;
 	
 		if (timeoutcount == 10) {
+
+		blink();
 
 		time2string(textstring, mytime);
 		display_string(3, textstring);
@@ -48,8 +67,9 @@ void user_isr (void) {
 	}
 	if (IFS(0) & (1 << 15)){
 
+		// Switch 3 interrupt
+		*porte = *porte * 2;
 		IFS(0) = 0;
-		(*porte)++;
 	}
 
 }
@@ -66,6 +86,9 @@ void labinit( void ) {
 
 	// Initialize port D, set bits 11-5 as inputs.
 	TRISD = TRISD & 0x0fe0;
+
+	// Start with rightmost LED
+	*porte = 1;
 	
 	/*
 	Set 0x70, 0111 000 for 1:256 prescaling.
@@ -73,7 +96,7 @@ void labinit( void ) {
 	Reset timer.
 	Start the timer by setting the 'ON' bit to '1', bit #15
 	in T2CON.
-	Heavily inspired byexercise 2, question 4.
+	Heavily inspired by exercise 2, question 4.
 	*/	
 
 	T2CONSET = 0x70;
@@ -99,9 +122,16 @@ void labinit( void ) {
 /* This function is called repetitively from the main program */
 void labwork( void ) {
 
-	prime = nextprime(prime);
-	display_string(0, itoaconv(prime));
-	display_update();
+
+	if (game_started) {
+
+		//*porte = *porte * 2;
+	} else {		
+
+		prime = nextprime(prime);
+		display_string(0, itoaconv(prime));
+		display_update();
+	}
 }
 
 

@@ -13,8 +13,8 @@
 
 int main(void) {
 	/* Set up peripheral bus clock */
-        /* OSCCONbits.PBDIV = 1; */
-        OSCCONCLR = 0x100000; /* clear PBDIV bit 1 */
+    /* OSCCONbits.PBDIV = 1; */
+    OSCCONCLR = 0x100000; /* clear PBDIV bit 1 */
 	OSCCONSET = 0x080000; /* set PBDIV bit 0 */
 	
 	/* Set up output pins */
@@ -48,6 +48,7 @@ int main(void) {
 	SPI2CONSET = 0x8000;
 	
 	display_init();
+/*
 	display_string(0, "KTH/ICT lab");
 	display_string(1, "in Computer");
 	display_string(2, "Engineering");
@@ -55,7 +56,9 @@ int main(void) {
 	display_update();
 	
 	display_image(96, icon);
-	
+
+*/
+
 	labinit(); /* Do any lab-specific initialization */
 
 	while( 1 )
