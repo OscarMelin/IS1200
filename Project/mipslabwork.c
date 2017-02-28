@@ -99,6 +99,12 @@ int menu(void) {
     for (;;) {
 
         int btn = getbtns();
+        int sw = getsw();
+
+        if (sw <= 3) {
+            
+            PR2 = TMR2PERIOD / (sw + 1);
+        }
 
         if ((btn == 4)) {
             game_started = 1;
