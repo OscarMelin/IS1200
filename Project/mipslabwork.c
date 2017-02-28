@@ -47,7 +47,7 @@ void new_ball(void) {
 
     // Start with second rightmost LED
 	*porte = 4;
-    delay(500);
+    delay(200);
     direction = 0;
 
 }
@@ -68,25 +68,34 @@ void score(int player) {
         new_ball();
     }
 
+    display_string(1, itoaconv(left_score));
+    display_string(2, "-");
+    display_string(3, itoaconv(right_score));
+    display_update();
+
     /* A player has reached 3 points, game is stopped. */
     if (left_score >= 3) {
         display_string(0, "Left wins");
         display_update();
         game_started = 0;
+        delay(2000);
+        labwork();
 
     } else if (right_score >=3){
         display_string(0, "Right wins");
         display_update();
         game_started = 0;
+        delay(2000);
+        labwork();
     }
-
-    display_string(1, itoaconv(left_score));
-    display_string(2, "-");
-    display_string(3, itoaconv(right_score));
-    display_update();
 }
 
 int menu(void) {
+
+    /* Reset */
+    direction = 0;
+    left_score = 0;
+    right_score = 0;
 
     display_string(0, "LED Ping Pong");
     display_string(1, "Set 0-3 speed");
@@ -129,14 +138,6 @@ void user_isr (void) {
 		if (timeoutcount == 10) {
 
 		blink();
-
-/*
-		time2string(textstring, mytime);
-		display_string(3, textstring);
-        display_string(0, "");
-		display_update();
-		tick( &mytime);
-*/
 		timeoutcount = 0;
 		}
 
