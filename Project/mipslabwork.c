@@ -9,10 +9,11 @@
 	 Latest update 2015-08-28 by F Lundevall
 
 	 For copyright and licensing, see file COPYING */
-
+#include <stdio.h>
 #include <stdint.h>	 /* Declarations of uint_32 and the like */
 #include <pic32mx.h>	/* Declarations of system-specific addresses etc */
 #include "mipslab.h"	/* Declatations for these labs */
+
 
 #define TMR2PERIOD ((80000000 / 256) / 10) /* 100ms */
 #if TMR2PERIOD > 0xffff
@@ -42,16 +43,29 @@ void blink(void) {
 	}
 }
 
+void new_ball(void) {
+
+    // Start with second rightmost LED
+	*porte = 4;
+    delay(1000);
+    direction = 0;
+
+}
+
 void score(int player) {
-    /* 0 - right player, 1 - left player */
+    /* 0 - left player, 1 - right player */
 
-    char text[] = "Point";
+    char text[5] = "";
 
-    if (player) {
-    /* Left player */
-
-    } else {
+    if (player == 1) {
     /* Right player */
+        right_score++;
+        new_ball();
+
+    } else if (player == 0){
+    /* left player */
+        left_score++;
+        new_ball();
     }
 
     /* A player has reached 3 points, game is stopped. */
@@ -61,16 +75,15 @@ void score(int player) {
         game_started = 0;
 
     } else if (right_score >=3){
-        display_string(0, "Right wins wins");
+        display_string(0, "Right wins");
         display_update();
         game_started = 0;
     }
 
-
-
-    display_string(0, text);
+    display_string(1, itoaconv(left_score));
+    display_string(2, "-");
+    display_string(3, itoaconv(right_score));
     display_update();
-
 }
 
 void user_isr (void) {
@@ -160,27 +173,28 @@ void labwork( void ) {
 
 	if (game_started) {
 
+        display_string(0, "GAME STARTED");
+        display_update();
 
         /* Incorrect hits */
         if ((btn == 1) && *porte != 1) {
             
             //Point to left player
-            score(1);
-
+            score(0);
         }
 
         if ((btn == 4) && *porte != 128) {
 
             //Point to right player            
-            score(0);
+            score(1);
         }
 
         /* Missed hits */
         if (*porte == 0 && direction)
-            //Point to right player            
+            //Point to left player            
             score(0);
         if (*porte == 0 && !direction)
-            //Point to left player
+            //Point to right player
             score(1);
 
         /* Correct hits */
