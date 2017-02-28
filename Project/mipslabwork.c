@@ -21,9 +21,12 @@
 
 int mytime = 0x0000;
 int timeoutcount = 0;
-int prime = 1234567;
 int game_started = 1; // Flag indicating if game is started. 
 int direction = 0; // Direction of blinking, 0 - Left, 1 - Right
+
+int left_score = 0;
+int right_score = 0;
+
 volatile int *porte = (volatile int *) 0xbf886110;
 
 char textstring[] = "";
@@ -39,6 +42,37 @@ void blink(void) {
 	}
 }
 
+void score(int player) {
+    /* 0 - right player, 1 - left player */
+
+    char text[] = "Point";
+
+    if (player) {
+    /* Left player */
+
+    } else {
+    /* Right player */
+    }
+
+    /* A player has reached 3 points, game is stopped. */
+    if (left_score >= 3) {
+        display_string(0, "Left wins");
+        display_update();
+        game_started = 0;
+
+    } else if (right_score >=3){
+        display_string(0, "Right wins wins");
+        display_update();
+        game_started = 0;
+    }
+
+
+
+    display_string(0, text);
+    display_update();
+
+}
+
 void user_isr (void) {
 
 
@@ -51,10 +85,13 @@ void user_isr (void) {
 
 		blink();
 
+/*
 		time2string(textstring, mytime);
 		display_string(3, textstring);
+        display_string(0, "");
 		display_update();
 		tick( &mytime);
+*/
 		timeoutcount = 0;
 		}
 
@@ -127,17 +164,24 @@ void labwork( void ) {
         /* Incorrect hits */
         if ((btn == 1) && *porte != 1) {
             
-            //Right loses
-            display_string(0, "Point to left");
-            display_update();
+            //Point to left player
+            score(1);
+
         }
 
         if ((btn == 4) && *porte != 128) {
 
-            //left loses
-            display_string(0, "Point to right");
-            display_update();
+            //Point to right player            
+            score(0);
         }
+
+        /* Missed hits */
+        if (*porte == 0 && direction)
+            //Point to right player            
+            score(0);
+        if (*porte == 0 && !direction)
+            //Point to left player
+            score(1);
 
         /* Correct hits */
         if ((btn == 1) && *porte == 1)
@@ -145,12 +189,12 @@ void labwork( void ) {
 
 	    if ((btn == 4) && *porte == 128)
 		    direction = 1;
-		//*porte = *porte * 2;
+
+
+
 	} else {		
 
-		prime = nextprime(prime);
-		display_string(0, itoaconv(prime));
-		display_update();
+
 	}
 }
 
