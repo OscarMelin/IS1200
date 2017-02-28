@@ -23,7 +23,7 @@ int mytime = 0x0000;
 int timeoutcount = 0;
 int prime = 1234567;
 int game_started = 1; // Flag indicating if game is started. 
-int direction = 1; // Direction of blinking, 0 - Left, 1 - Right
+int direction = 0; // Direction of blinking, 0 - Left, 1 - Right
 volatile int *porte = (volatile int *) 0xbf886110;
 
 char textstring[] = "";
@@ -31,12 +31,6 @@ char textstring[] = "";
 /* Interrupt Service Routine */
 
 void blink(void) {
-
-	if (*porte == 1)
-		direction = 0;
-
-	if (*porte == 128)
-		direction = 1;
 
 	if (direction) {
 		*porte = *porte / 2;
@@ -87,8 +81,8 @@ void labinit( void ) {
 	// Initialize port D, set bits 11-5 as inputs.
 	TRISD = TRISD & 0x0fe0;
 
-	// Start with rightmost LED
-	*porte = 1;
+	// Start with second rightmost LED
+	*porte = 2;
 	
 	/*
 	Set 0x70, 0111 000 for 1:256 prescaling.
@@ -109,7 +103,10 @@ void labinit( void ) {
 	IEC(0) = 0x100;
 	// Enable interrupts for SW3
 	IPC(3) = 0x1c000000;
-	IEC(0) = IEC(0) | (1 << 15);	
+	IEC(0) = IEC(0) | (1 << 15);
+    // TODO: Enable interrupts for BTN4
+
+
 
 
 
@@ -122,9 +119,32 @@ void labinit( void ) {
 /* This function is called repetitively from the main program */
 void labwork( void ) {
 
+    int btn = getbtns();
 
 	if (game_started) {
 
+
+        /* Incorrect hits */
+        if ((btn == 1) && *porte != 1) {
+            
+            //Right loses
+            display_string(0, "Point to left");
+            display_update();
+        }
+
+        if ((btn == 4) && *porte != 128) {
+
+            //left loses
+            display_string(0, "Point to right");
+            display_update();
+        }
+
+        /* Correct hits */
+        if ((btn == 1) && *porte == 1)
+		    direction = 0;
+
+	    if ((btn == 4) && *porte == 128)
+		    direction = 1;
 		//*porte = *porte * 2;
 	} else {		
 
