@@ -47,7 +47,7 @@ void new_ball(void) {
 
     // Start with second rightmost LED
 	*porte = 4;
-    delay(1000);
+    delay(500);
     direction = 0;
 
 }
@@ -84,6 +84,32 @@ void score(int player) {
     display_string(2, "-");
     display_string(3, itoaconv(right_score));
     display_update();
+}
+
+int menu(void) {
+
+    display_string(0, "LED Ping Pong");
+    display_string(1, "Set 0-3 speed");
+    display_string(2, "with switches");
+    display_string(3, "Btn 4 to start");
+    display_update();
+
+    *porte = 255;
+
+    for (;;) {
+
+        int btn = getbtns();
+
+        if ((btn == 4)) {
+            game_started = 1;
+            delay(500);
+
+            // Start with second rightmost LED
+            *porte = 2;
+
+            return 0;
+        }
+    }
 }
 
 void user_isr (void) {
@@ -130,9 +156,6 @@ void labinit( void ) {
 
 	// Initialize port D, set bits 11-5 as inputs.
 	TRISD = TRISD & 0x0fe0;
-
-	// Start with second rightmost LED
-	*porte = 2;
 	
 	/*
 	Set 0x70, 0111 000 for 1:256 prescaling.
@@ -166,50 +189,53 @@ void labinit( void ) {
 	return;
 }
 
-/* This function is called repetitively from the main program */
+/* This function is called from the main program */
 void labwork( void ) {
 
-    int btn = getbtns();
+    menu();
 
-	if (game_started) {
+    for (;;) {
 
-        display_string(0, "GAME STARTED");
-        display_update();
+        int btn = getbtns();
 
-        /* Incorrect hits */
-        if ((btn == 1) && *porte != 1) {
-            
-            //Point to left player
-            score(0);
-        }
+	    if (game_started) {
 
-        if ((btn == 4) && *porte != 128) {
+            display_string(0, "GAME STARTED");
+            display_update();
 
-            //Point to right player            
-            score(1);
-        }
+            /* Incorrect hits */
+            if ((btn == 1) && *porte != 1) {
+                
+                //Point to left player
+                score(0);
+            }
 
-        /* Missed hits */
-        if (*porte == 0 && direction)
-            //Point to left player            
-            score(0);
-        if (*porte == 0 && !direction)
-            //Point to right player
-            score(1);
+            if ((btn == 4) && *porte != 128) {
 
-        /* Correct hits */
-        if ((btn == 1) && *porte == 1)
-		    direction = 0;
+                //Point to right player            
+                score(1);
+            }
 
-	    if ((btn == 4) && *porte == 128)
-		    direction = 1;
+            /* Missed hits */
+            if (*porte == 0 && direction)
+                //Point to left player            
+                score(0);
+            if (*porte == 0 && !direction)
+                //Point to right player
+                score(1);
+
+            /* Correct hits */
+            if ((btn == 1) && *porte == 1)
+		        direction = 0;
+
+	        if ((btn == 4) && *porte == 128)
+		        direction = 1;
+
+	    } else {		
 
 
-
-	} else {		
-
-
-	}
+	    }
+    }
 }
 
 
