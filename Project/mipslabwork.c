@@ -131,24 +131,17 @@ void user_isr (void) {
 
 
 	if (IFS(0) & 0x100) {
-		// Timer interrupt
-		timeoutcount++;
-		IFS(0) = 0;
+	    // Timer interrupt
+	    timeoutcount++;
+	    IFS(0) = 0;
 	
 		if (timeoutcount == 10) {
 
-		blink();
-		timeoutcount = 0;
+		    blink();
+		    timeoutcount = 0;
 		}
 
 	}
-	if (IFS(0) & (1 << 15)){
-
-		// Switch 3 interrupt
-		*porte = *porte * 2;
-		IFS(0) = 0;
-	}
-
 }
 
 /* Lab-specific initialization goes here */
@@ -181,14 +174,6 @@ void labinit( void ) {
 	// Enable interrupts from TMR2
 	IPC(2) = 4;
 	IEC(0) = 0x100;
-	// Enable interrupts for SW3
-	IPC(3) = 0x1c000000;
-	IEC(0) = IEC(0) | (1 << 15);
-    // TODO: Enable interrupts for BTN4
-
-
-
-
 
 	// Enable interrupts globally
 	enable_interrupt();
@@ -244,9 +229,3 @@ void labwork( void ) {
 	    }
     }
 }
-
-
-
-
-
-
